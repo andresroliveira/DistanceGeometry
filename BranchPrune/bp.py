@@ -107,7 +107,7 @@ def bp(n, g, onesol = False):
 
 		if not prune and k == n:
 			sol["X"].append(np.copy(X))
-			sol["branch"].append(np.copy(branch[]))
+			sol["branch"].append(np.copy(branch))
 			if onesol:
 				return sol
 
@@ -163,12 +163,12 @@ def main():
 	X = sol["X"]
 	branch = sol["branch"]
 
-	print(len(X), '\n')
+	# print(len(X), '\n')
 
 	for i in range(len(X)):
 		print(branch[i])
 		print(X[i])
-		print(isSol(E, n, X[i]))
+		# print(isSol(E, n, X[i]))
 		print()
 
 
