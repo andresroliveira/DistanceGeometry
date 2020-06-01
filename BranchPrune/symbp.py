@@ -270,8 +270,8 @@ def main():
 	print(len(X), '\n')
 
 	for i in range(len(X)):
-		print(branch[i])
-		print(X[i][1:n+1])
+		# print(branch[i])
+		# print(X[i][1:n+1])
 		print(isSol(E, n, X[i]))
 		print()
 
