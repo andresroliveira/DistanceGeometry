@@ -166,6 +166,7 @@ int main(){
     for(int i=4;i<=n;i++) {
         double omega = realRand(0, PI)*( (rand()%2)?1:-1 );
         w[i] = omega;
+        printf("%d -> %lf\n", i, cos(omega));
     }
     w[1] = w[2] = w[3] = 0;
     
