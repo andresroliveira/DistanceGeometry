@@ -131,7 +131,7 @@ double realRand(double a, double b){
     double r;
 
     do{
-         r = ((double) rand() / RAND_MAX);
+         r = ((double) rand() / ((double)RAND_MAX));
     }while(abs(r) < EPS || abs(1 - r) < EPS);
 
     return a + (b - a)*r;
@@ -156,16 +156,15 @@ void fisherYatesShuffle(int vet[], int n){
 int pos[30*NMAX];
 
 int main(){
-
-    // cerr << "Entre com um caso: "; int caso; cin >> caso; for(int i=1;i<=caso;i++) rand();
     srand (time(NULL));
+    cerr << "Entre com um caso: "; int caso; cin >> caso; for(int i=1;i<=caso;i++) rand();
     cerr << "Entre com o numero de atomos: ";
     int n; cin >> n;
 
     for(int i=1;i<=n;i++) d[i] = 1.526; d[1] = 0;
     for(int i=1;i<=n;i++) t[i] = 1.91; t[1] = t[2] = 0;
     for(int i=4;i<=n;i++) {
-        double omega = realRand(0, PI)*(pow(-1,rand()%4));
+        double omega = realRand(0, PI)*( (rand()%2)?1:-1 );
         w[i] = omega;
     }
     w[1] = w[2] = w[3] = 0;
