@@ -22,18 +22,34 @@ def toBin(i):
     s = s[::-1]
     return s
 
+def multiply(A, B, C): # C = A * B 
+    for i in range(4):
+        for j in range(4):
+            aux = 0.0
+            for k in range(4):
+                aux += A[i][k]*B[k][j]
+            C[i][j] = aux
+
+def PosicaoAtomo(B):
+    return np.array([B[0][3], B[1][3], B[2][3]])
+
+def copy(B, C):
+    for i in range(4):
+        for j in range(4):
+            B[i][j] = C[i][j]
+
 def h(i):
-    ori = np.array([0.0,0.0,0.0,1.0])
-    x = np.array([np.array([0.0,0.0,0.0]) for _ in range(n+1)])
+    x = [np.array([0.0,0.0,0.0]) for _ in range(n+1)]
     x[2] = np.array([ -d[1][2], 0, 0 ])
     x[3] = np.array([ -d[1][2] + d[2][3]*cos(th[3]), d[2][3]*sin(th[3]), 0])
 
-    B2 = np.array([[-1,0,0,-d[1][2]], [0,1,0,0], [0,0,-1,0], [0,0,0,1]])
+    B2 = [[-1,0,0,-d[1][2]], [0,1,0,0], [0,0,-1,0], [0,0,0,1]]
     ct = cos(th[3])
     st = sin(th[3])
     di = d[2][3]
-    B3 = np.array([[-ct, -st, 0, -di*ct], [st, -ct, 0, di*st], [0,0,1,0],[0,0,0,1]])
-    B = B2.dot(B3)
+    B3 = [[-ct, -st, 0, -di*ct], [st, -ct, 0, di*st], [0,0,1,0],[0,0,0,1]]
+    B = [[1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1]]
+    multiply(B2, B3, B); # B = B2 * B3
 
     for k in range(4, n+1):
         sgn = 1
@@ -42,11 +58,14 @@ def h(i):
         ct,st = cos(th[k]),sin(th[k])
         di = d[k-1][k]
         sw = (-1)**sgn * sqrt(1 - cw[k]**2)
-        Bi = np.array([[-ct, -st, 0, -di*ct], [st*cw[k], -ct*cw[k], -sw, di*st*cw[k]], [st*sw, -ct*sw, -cw[k], di*st*sw], [0,0,0,1]])
-        B = B.dot(Bi)
-        xi = B.dot(ori)
-        x[k] = np.array([ xi[0]/xi[3], xi[1]/xi[3], xi[2]/xi[3] ])
-    return x
+
+        A = [[-ct, -st, 0, -di*ct], [st*cw[k], -ct*cw[k], -sw, di*st*cw[k]], [st*sw, -ct*sw, cw[k], di*st*sw], [0, 0, 0, 1]]
+        C = [[1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1]]
+        multiply(B, A, C) # C = B * A
+        x[k] = PosicaoAtomo(C)
+        copy(B, C)
+
+    return np.array(x)
 
 def g(x):
     s = 0.0
@@ -106,10 +125,14 @@ def main():
         den = rij*sqrt(4*rjl**2 * rjk**2 - (rjl**2 + rjk**2 - rkl**2)**2)*st/rjk
         cw[i] = num/den
 
+    # print(cw[1:n+1], th[1:n+1])
+
     for i in range(2**(n-3)):
-        print("f(", toBin(i),") = ", f(i), sep='')
-        print(h(i)[1:n+1])
-        print()
+        fi = f(i)
+        print("f(", toBin(i),") = ", fi, sep='')
+        if fi == 1:
+            print(h(i)[1:n+1])
+            print()
 
 
 if __name__ == '__main__':
