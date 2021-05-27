@@ -75,7 +75,7 @@ def g(x):
         xa = x[a]
         xb = x[b]
         dab = dist(xa, xb)
-        s += (dab - c)**2
+        s += (dab**2 - c**2)**2
 
     return s
 
