@@ -79,17 +79,21 @@ def g(x):
 
     return s
 
-def f(i):
-    EPS = 1/2
-    DEL = 10**-6
-
+def psi(xi):
     p1 = n*n*((n*5)**4 + 5**4)
     p2 = log(DEL/p1)/log(1-EPS)
+    return (xi/p1)**(1/p2)
 
-    return (1 - floor((g(h(i))/p1)**(1/p2)+ EPS))
+
+def f(i):
+    return 1 - floor(psi(g(h(i)))+ EPS)
 
 
 def main():
+    global EPS
+    EPS = 2/3
+    global DEL
+    DEL = 1e-4
     global n
     n, m = map(int, input().split())
     global E
