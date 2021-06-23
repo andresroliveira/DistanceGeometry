@@ -79,14 +79,22 @@ def g(x):
 
     return s
 
-def psi(xi):
-    p1 = n*n*((n*5)**4 + 5**4)
-    p2 = log(DEL/p1)/log(1-EPS)
-    return (xi/p1)**(1/p2)
+def psi(xi, caso = 0):
+    if caso == 1:
+        p1 = 6**4 * ( n**6 +  n**2)
+        p2 = log(DEL/p1)/log(1-EPS)
+        return (xi/p1)**(1/p2)
+    
+    if caso == 2:
+        return np.arctan( xi - DEL + np.tan(np.pi*(1/2 - EPS)) )/np.pi + 1/2
+
+    return 1/( 1 + (EPS / (1 - EPS)) * np.exp(DEL - xi) )
 
 
-def f(i):
-    return 1 - floor(psi(g(h(i)))+ EPS)
+def f(k):
+    xi = g(h(k))
+    # print(toBin(k), xi)
+    return 1 - floor(psi(xi) + EPS)
 
 
 def main():
@@ -111,31 +119,32 @@ def main():
 
     global th
     th = np.zeros(n+1)
-    for i in range(3, n+1):
-        th[i] = acos( (d[i-1][i]**2 + d[i-2][i-1]**2 - d[i-2][i]**2)/(2*d[i-1][i]*d[i-2][i-1]) )
+    for k in range(3, n+1):
+        th[k] = acos( (d[k-1][k]**2 + d[k-2][k-1]**2 - d[k-2][k]**2)/(2*d[k-1][k]*d[k-2][k-1]) )
 
     global cw
     cw = np.zeros(n+1)
-    for i in range(4,n+1):
-        rij = d[i-3][i-2]
-        rjk = d[i-2][i-1]
-        rkl = d[i-1][i]
-        rjl = d[i-2][i]
-        ril = d[i-3][i]
-        st  = sin(th[i-1])
-        ct  = cos(th[i-1])
+    for k in range(4,n+1):
+        rij = d[k-3][k-2]
+        rjk = d[k-2][k-1]
+        rkl = d[k-1][k]
+        rjl = d[k-2][k]
+        ril = d[k-3][k]
+        st  = sin(th[k-1])
+        ct  = cos(th[k-1])
 
         num = rij**2 + rjl**2 - ril**2 - rij*(rjl**2 + rjk**2 - rkl**2)*ct/rjk
         den = rij*sqrt(4*rjl**2 * rjk**2 - (rjl**2 + rjk**2 - rkl**2)**2)*st/rjk
-        cw[i] = num/den
+        cw[k] = num/den
 
     # print(cw[1:n+1], th[1:n+1])
 
-    for i in range(2**(n-3)):
-        fi = f(i)
-        print("f(", toBin(i),") = ", fi, sep='')
-        if fi == 1:
-            print(h(i)[1:n+1])
+    for k in range(2**(n-3)):
+        fk = f(k)
+        print("f(", toBin(k),") = ", fk, sep='')
+        if fk == 1:
+            # print("f(", toBin(k),") = ", fk, sep='')
+            print('\n', h(k)[1:n+1])
             print()
 
 
