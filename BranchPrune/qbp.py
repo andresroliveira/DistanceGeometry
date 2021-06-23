@@ -79,7 +79,7 @@ def g(x):
 
     return s
 
-def psi(xi, caso = 0):
+def phi(xi, caso = 0):
     if caso == 1:
         p1 = 6**4 * ( n**6 +  n**2)
         p2 = log(DEL/p1)/log(1-EPS)
@@ -94,7 +94,7 @@ def psi(xi, caso = 0):
 def f(k):
     xi = g(h(k))
     # print(toBin(k), xi)
-    return 1 - floor(psi(xi) + EPS)
+    return 1 - floor(phi(xi) + EPS)
 
 
 def main():
